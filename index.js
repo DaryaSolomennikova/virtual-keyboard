@@ -104,8 +104,123 @@ const Keyboard = {
   
       this.elements.main.appendChild(this.elements.keysContainer);
       document.body.appendChild(this.elements.main);
+
+      this.elements.keys.find(key => key.code === 'CapsLock').addEventListener('click', () => {
+        this.properties.capsLock = !this.properties.capsLock;
+        this.elements.keys.forEach(key => {
+          if (key.childElementCount === 0) {
+            if (this.properties.capsLock && !this.properties.shiftPressed) {
+              key.textContent = key.textContent.toUpperCase();
+            } else {
+              key.textContent = key.textContent.toLowerCase();
+            }
+          }
+        });
+      });
+  
+      document.addEventListener('keydown', (event) => {
+        if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') {
+          this.properties.shiftPressed = true;
+        }
+        if (event.code === 'AltLeft' || event.code === 'AltRight') {
+          this.properties.altPressed = true;
+        }
+        if (this.properties.shiftPressed && this.properties.altPressed) {
+          if (this.properties.language === 'en') {
+            this.properties.language = 'ru';
+          } else {
+            this.properties.language = 'en';
+          }
+          localStorage.setItem('language', this.properties.language);
+          this.elements.keysContainer.innerHTML = '';
+          this.elements.keysContainer.appendChild(this.createButtons());
+          this.properties.shiftPressed = false;
+          this.properties.altPressed = false;
+        }
+      });
+  
+      document.addEventListener('keydown', (event) => {
+        const button = document.querySelector(`[data-key="${event.code}"]`);
+        if (button) {
+          button.classList.add('clicked');
+        }
+      });
+      
+      document.addEventListener('keyup', (event) => {
+        const button = document.querySelector(`[data-key="${event.code}"]`);
+        if (button) {
+          button.classList.remove('clicked');
+        }
+        if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') {
+          this.properties.shiftPressed = false;
+        }
+      });
+  
+      document.addEventListener('keydown', (event) => {
+        if (event.key === '"') {
+          return;
+        }
+        const button = document.querySelector(`[data-key="${event.key.toLowerCase()}"]`)
+          || document.querySelector(
+            `[data-shift_${this.properties.language}='${event.key}']`,
+          );
+        if (button) {
+          button.classList.add('clicked');
+        }
+      });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.code === 'CapsLock') {
+          Keyboard.properties.capsLock = !Keyboard.properties.capsLock;
+          const capsButton = document.querySelector('[data-key="CapsLock"]');
+          capsButton.classList.toggle('clicked', Keyboard.properties.capsLock);
+          updateKeys();
+        }
+      });
+      
+      document.addEventListener('keyup', (event) => {
+        if (event.code === 'CapsLock') {
+          const capsButton = document.querySelector('[data-key="CapsLock"]');
+          capsButton.classList.toggle('clicked', Keyboard.properties.capsLock);
+          updateKeys();
+        }
+      });
+      
+      function updateKeys() {
+        for (const key of Keyboard.elements.keys) {
+          const keyLayout = getKeyLayout(key);
+          const keyText = Keyboard.properties.capsLock || Keyboard.properties.shiftPressed ?
+            keyLayout[Keyboard.properties.language].toUpperCase() :
+            keyLayout[Keyboard.properties.language];
+      
+          if (keyLayout.type === 'special' && keyLayout.value === 'caps') {
+            key.classList.toggle('clicked', Keyboard.properties.capsLock);
+          }
+      
+          key.textContent = keyText;
+        }
+      }
+
+      document.addEventListener('keyup', (event) => {
+        if (event.key === '"') {
+          return;
+        }
+        const button = document.querySelector(`[data-key="${event.key.toLowerCase()}"]`)
+          || document.querySelector(
+            `[data-shift_${this.properties.language}='${event.key}']`,
+          );
+        if (button) {
+          button.classList.remove('clicked');
+        }
+      });
     },
 
+    handleInput(value) {
+        this.elements.textarea.focus();
+        this.elements.textarea.value += value;
+      },
+        
+  
     createButtons() {
       const fragment = document.createDocumentFragment();
       const { language } = this.properties;
@@ -113,27 +228,58 @@ const Keyboard = {
         const key = item[language];
         const button = document.createElement('button');
         button.classList.add(`${key}`);
+        button.setAttribute('type', 'button');
+        button.setAttribute('data-key', `${key}`);
+        if (item[`shift_${language}`]) {
+          button.setAttribute(`data-shift_${language}`, item[`shift_${language}`]);
+        }
         button.classList.add('keyboard__button');
   
         switch (key) {
           case 'Backspace':
+            button.classList.add('backspace');
             button.innerHTML = '<span>&larr;</span> Backspace';
-
+            button.addEventListener('click', () => {
+              const cursorPosition = this.elements.textarea.selectionStart;
+              let { value } = this.elements.textarea;
+              value = value.slice(0, cursorPosition - 1) + value.slice(cursorPosition);
+              this.elements.textarea.value = value;
+              this.elements.textarea.focus();
+              this.elements.textarea.setSelectionRange(
+                cursorPosition - 1,
+                cursorPosition - 1,
+              );
+            });
+  
             break;
   
           case 'CapsLock':
             button.innerHTML = 'CapsLock';
-           
+            button.addEventListener('click', () => {
+              if (!this.properties.capsLock) {
+                button.classList.add('clicked');
+                this.properties.capsLock = true;
+              } else {
+                button.classList.remove('clicked');
+                this.properties.capsLock = false;
+              }
+            });
             break;
   
           case 'Enter':
             button.classList.add('enter');
             button.innerHTML = 'Enter';
-           
+            button.addEventListener('click', () => {
+              this.handleInput('\n');
+            });
+  
             break;
   
           case 'Space':
             button.innerHTML = ' ';
+            button.addEventListener('click', () => {
+              this.handleInput(' ');
+            });
   
             break;
   
@@ -144,7 +290,7 @@ const Keyboard = {
   
           case 'ArrowDown':
             button.innerHTML = '<span>&darr;</span>';
-        
+  
             break;
 
           case 'ArrowLeft':
@@ -153,7 +299,7 @@ const Keyboard = {
             break;
           case 'ArrowRight':
             button.innerHTML = '<span>&rarr;</span>';
-           
+  
             break;
 
           case 'ShiftLeft':
@@ -165,7 +311,7 @@ const Keyboard = {
           case 'ControlRight':
           case 'ControlLeft':
             button.innerHTML = 'ctrl';
-
+            
             break;
 
           case 'AltLeft':
@@ -175,7 +321,14 @@ const Keyboard = {
             break;
           case 'Tab':
             button.innerHTML = 'tab';
-        
+            button.addEventListener('click', () => {
+            const { selectionStart, selectionEnd, value } = this.elements.textarea;
+            const tabSize = 4;
+            const spaces = Array(tabSize + 1).join(' ');
+            this.elements.textarea.value = value.substring(0, selectionStart) + spaces + value.substring(selectionEnd);
+            this.elements.textarea.selectionStart = this.elements.textarea.selectionEnd = selectionStart + tabSize;
+            });
+  
             break;
 
           case 'Win':
@@ -185,12 +338,21 @@ const Keyboard = {
   
           case 'Backslash':
             button.innerHTML = '<span>\\</span>';
-     
+            button.addEventListener('click', () => {
+              this.handleInput('\\');
+            });
+  
             break;
-
-          default:
+  
+            default:
             button.textContent = key.toLowerCase();
-     
+            button.addEventListener('click', () => {
+              const { shiftPressed, capsLock } = this.properties;
+              const isUppercase = (shiftPressed && !capsLock) || (!shiftPressed && capsLock);
+              const value = isUppercase ? key.toUpperCase() : key.toLowerCase();
+              this.handleInput(value);
+            });
+  
             break;
         }
   
@@ -201,5 +363,7 @@ const Keyboard = {
     },
   };
 
+  window.addEventListener('DOMContentLoaded', () => {
     Keyboard.init();
+  });
   

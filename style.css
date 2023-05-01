@@ -89,3 +89,9 @@ textarea {
     width: 8%;
     max-width: 160px;
 }
+
+.clicked {
+    background-color: rgb(246, 31, 139);
+    transform: scale(1.1);
+    box-shadow: 0 0 5px #cd1a7d;
+}
