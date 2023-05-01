@@ -1,15 +1,17 @@
 body {
     text-align: center;
     height: 100%;
-    background: #393939;
+    background: #f3c5e2;
 }
   
 textarea {
+    font-size: 25px;
     width: 900px;
     height: 30vh;
     border: 2px solid #333;
     margin: 45px 50px;
     border-radius: 5px;
+    background: #f4dbf4;
 }
   
 .keyboard {
@@ -19,7 +21,7 @@ textarea {
 .keyboard__buttons {
     margin: 0 auto;
     width: 1000px;
-    background: #eabcd3;
+    background: rgb(43 37 42);
     padding: 15px;
     border-radius: 10px;
 }

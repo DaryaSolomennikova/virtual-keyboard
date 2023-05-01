@@ -101,22 +101,20 @@ const Keyboard = {
       this.elements.keys = this.elements.keysContainer.querySelectorAll(
         '.keyboard__buttons',
       );
+
+      document.addEventListener('keydown', (event) => {
+        if (event.code === 'Tab') {
+          event.preventDefault();
+          const { selectionStart, selectionEnd, value } = this.elements.textarea;
+            const tabSize = 4;
+            const spaces = Array(tabSize + 1).join(' ');
+            this.elements.textarea.value = value.substring(0, selectionStart) + spaces + value.substring(selectionEnd);
+            this.elements.textarea.selectionStart = this.elements.textarea.selectionEnd = selectionStart + tabSize;
+        }  
+          });
   
       this.elements.main.appendChild(this.elements.keysContainer);
       document.body.appendChild(this.elements.main);
-
-      this.elements.keys.find(key => key.code === 'CapsLock').addEventListener('click', () => {
-        this.properties.capsLock = !this.properties.capsLock;
-        this.elements.keys.forEach(key => {
-          if (key.childElementCount === 0) {
-            if (this.properties.capsLock && !this.properties.shiftPressed) {
-              key.textContent = key.textContent.toUpperCase();
-            } else {
-              key.textContent = key.textContent.toLowerCase();
-            }
-          }
-        });
-      });
   
       document.addEventListener('keydown', (event) => {
         if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') {
@@ -299,6 +297,9 @@ const Keyboard = {
             break;
           case 'ArrowRight':
             button.innerHTML = '<span>&rarr;</span>';
+            button.addEventListener('click', () => {
+            //   this.handleInput(button.textContent);
+            });
   
             break;
 
