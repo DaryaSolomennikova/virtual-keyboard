@@ -93,6 +93,7 @@ const Keyboard = {
       body.appendChild(this.elements.textarea);
       this.elements.main = document.createElement('div');
       this.elements.keysContainer = document.createElement('div');
+      this.elements.text = document.createElement('p');
   
       this.elements.main.classList.add('keyboard');
       this.elements.keysContainer.classList.add('keyboard__buttons');
@@ -101,6 +102,8 @@ const Keyboard = {
       this.elements.keys = this.elements.keysContainer.querySelectorAll(
         '.keyboard__buttons',
       );
+      document.body.appendChild(this.elements.text);
+      this.elements.text.innerHTML = 'OC - Windows. Язык клавиатуры переключается комбинацией Shift и alt.';
 
       document.addEventListener('keydown', (event) => {
         if (event.code === 'Tab') {
