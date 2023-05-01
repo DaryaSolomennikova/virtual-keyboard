@@ -1,0 +1,18 @@
+body {
+    text-align: center;
+  }
+  
+  textarea {
+    width: 900px;
+    height: 30vh;
+    border: 2px solid #333;
+  }
+  
+  .keyboard {
+    border: 1px solid #333;
+    background-color: rgb(63, 59, 54); 
+    height: 30vh;
+    margin-top: 20px;
+  }
+  
+ 
