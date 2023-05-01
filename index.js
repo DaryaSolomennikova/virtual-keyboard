@@ -96,6 +96,7 @@ const Keyboard = {
   
       this.elements.main.classList.add('keyboard');
       this.elements.keysContainer.classList.add('keyboard__buttons');
+      this.elements.keysContainer.appendChild(this.createButtons());
   
       this.elements.keys = this.elements.keysContainer.querySelectorAll(
         '.keyboard__buttons',
@@ -103,7 +104,102 @@ const Keyboard = {
   
       this.elements.main.appendChild(this.elements.keysContainer);
       document.body.appendChild(this.elements.main);
-    }
-}
+    },
+
+    createButtons() {
+      const fragment = document.createDocumentFragment();
+      const { language } = this.properties;
+      keyBoardLayout.forEach((item) => {
+        const key = item[language];
+        const button = document.createElement('button');
+        button.classList.add(`${key}`);
+        button.classList.add('keyboard__button');
+  
+        switch (key) {
+          case 'Backspace':
+            button.innerHTML = '<span>&larr;</span> Backspace';
+
+            break;
+  
+          case 'CapsLock':
+            button.innerHTML = 'CapsLock';
+           
+            break;
+  
+          case 'Enter':
+            button.classList.add('enter');
+            button.innerHTML = 'Enter';
+           
+            break;
+  
+          case 'Space':
+            button.innerHTML = ' ';
+  
+            break;
+  
+          case 'ArrowUp':
+            button.innerHTML = '<span>&uarr;</span>';
+  
+            break;
+  
+          case 'ArrowDown':
+            button.innerHTML = '<span>&darr;</span>';
+        
+            break;
+
+          case 'ArrowLeft':
+            button.innerHTML = '<span>&larr;</span>';
+  
+            break;
+          case 'ArrowRight':
+            button.innerHTML = '<span>&rarr;</span>';
+           
+            break;
+
+          case 'ShiftLeft':
+          case 'ShiftRight':
+            button.innerHTML = 'shift';
+  
+            break;
+  
+          case 'ControlRight':
+          case 'ControlLeft':
+            button.innerHTML = 'ctrl';
+
+            break;
+
+          case 'AltLeft':
+          case 'AltRight':
+            button.innerHTML = 'alt';
+  
+            break;
+          case 'Tab':
+            button.innerHTML = 'tab';
+        
+            break;
+
+          case 'Win':
+            button.innerHTML = 'win';
+  
+            break;
+  
+          case 'Backslash':
+            button.innerHTML = '<span>\\</span>';
+     
+            break;
+
+          default:
+            button.textContent = key.toLowerCase();
+     
+            break;
+        }
+  
+        fragment.appendChild(button);
+      });
+  
+      return fragment;
+    },
+  };
+
     Keyboard.init();
   
