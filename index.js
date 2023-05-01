@@ -175,7 +175,6 @@ const Keyboard = {
           Keyboard.properties.capsLock = !Keyboard.properties.capsLock;
           const capsButton = document.querySelector('[data-key="CapsLock"]');
           capsButton.classList.toggle('clicked', Keyboard.properties.capsLock);
-          updateKeys();
         }
       });
       
@@ -183,24 +182,8 @@ const Keyboard = {
         if (event.code === 'CapsLock') {
           const capsButton = document.querySelector('[data-key="CapsLock"]');
           capsButton.classList.toggle('clicked', Keyboard.properties.capsLock);
-          updateKeys();
         }
       });
-      
-      function updateKeys() {
-        for (const key of Keyboard.elements.keys) {
-          const keyLayout = getKeyLayout(key);
-          const keyText = Keyboard.properties.capsLock || Keyboard.properties.shiftPressed ?
-            keyLayout[Keyboard.properties.language].toUpperCase() :
-            keyLayout[Keyboard.properties.language];
-      
-          if (keyLayout.type === 'special' && keyLayout.value === 'caps') {
-            key.classList.toggle('clicked', Keyboard.properties.capsLock);
-          }
-      
-          key.textContent = keyText;
-        }
-      }
 
       document.addEventListener('keyup', (event) => {
         if (event.key === '"') {
