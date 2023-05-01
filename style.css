@@ -1,0 +1,103 @@
+body {
+    text-align: center;
+    height: 100%;
+    background: #f3c5e2;
+}
+  
+textarea {
+    font-size: 25px;
+    width: 900px;
+    height: 30vh;
+    border: 2px solid #333;
+    margin: 45px 50px;
+    border-radius: 5px;
+    background: #f4dbf4;
+}
+  
+.keyboard {
+    height: 30vh;
+}
+ 
+.keyboard__buttons {
+    margin: 0 auto;
+    width: 1000px;
+    background: rgb(43 37 42);
+    padding: 15px;
+    border-radius: 10px;
+}
+  
+.keyboard__button {
+    width: 6%;
+    height: 55px;
+    max-width: 90px;
+    margin: 3px;
+    border-radius: 5px;
+    border: 2px solid #cd1a7d;
+    background-color: #383143;
+    color: #ffffff;
+    font-size: 1.5em;
+    cursor: pointer;
+    vertical-align: top;
+    padding: 0;
+    position: relative;
+    transition: all .5s ease;
+}
+
+.keyboard__button:hover {
+    background-color: rgba(246, 31, 139, 0.452);
+}
+
+.keyboard__button:active {
+    background-color: rgb(246, 31, 139);
+    transform: scale(1.1);
+    box-shadow: 0 0 5px #cd1a7d;
+}
+  
+.Backspace{
+    width: 15%;
+    font-size: 1.0em;
+}
+
+.Tab {
+    width: 9%;
+    font-size: 1.5em;
+}
+  
+.CapsLock {
+    width: 10%;
+    max-width: 100px;
+    font-size: 18px;
+}
+
+.Enter {
+    width: 19%;
+    max-width: 115px;
+    font-size: 18px;
+  }
+  
+.Space {
+    width: 40%;
+    max-width: 500px;
+}
+  
+.ShiftLeft {
+    width: 18%;
+    max-width: 90px;
+}
+  
+.ShiftRight {
+    width: 18%;
+    max-width: 126px;
+    font-size: 1.6em;
+}
+  
+ .ControlLeft  {
+    width: 8%;
+    max-width: 160px;
+}
+
+.clicked {
+    background-color: rgb(246, 31, 139);
+    transform: scale(1.1);
+    box-shadow: 0 0 5px #cd1a7d;
+}
