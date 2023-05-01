@@ -40,7 +40,11 @@ textarea {
     vertical-align: top;
     padding: 0;
     position: relative;
-    transition: all .07s ease;
+    transition: all .5s ease;
+}
+
+.keyboard__button:hover {
+    background-color: rgba(246, 31, 139, 0.452);
 }
 
 .keyboard__button:active {
